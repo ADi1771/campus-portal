@@ -1,0 +1,150 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Checkout - College Store</title>
+    <link rel="stylesheet" href="{% static 'printing/style.css' %}">
+    <style>
+        .page-header-store {
+            background: linear-gradient(135deg, #a855f7, #ec4899);
+            color: white; padding: 1.25rem 0;
+        }
+        .page-header-store .container { display: flex; justify-content: space-between; align-items: center; }
+        .page-header-store a { color: white; text-decoration: none; font-weight: 600; }
+        .page-header-store h1 { font-size: 1.5rem; }
+
+        .checkout-box {
+            max-width: 600px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 4px 16px rgba(0,0,0,0.1);
+        }
+        .checkout-header {
+            background: linear-gradient(135deg, #f3e8ff, #e0e7ff);
+            padding: 1.5rem;
+            border-bottom: 1px solid #e5e7eb;
+        }
+        .checkout-header h2 { font-size: 1.25rem; font-weight: 700; color: #1f2937; }
+        .checkout-items { padding: 1.5rem; }
+        .checkout-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 0.75rem 0;
+            border-bottom: 1px solid #f3f4f6;
+            font-size: 0.9rem;
+        }
+        .checkout-item:last-child { border-bottom: none; }
+        .checkout-item-name { color: #374151; font-weight: 500; }
+        .checkout-item-price { color: #1f2937; font-weight: 600; }
+        .checkout-total {
+            display: flex;
+            justify-content: space-between;
+            padding: 1rem 1.5rem;
+            background: #f9fafb;
+            border-top: 2px solid #e5e7eb;
+            font-weight: 700;
+            font-size: 1.1rem;
+        }
+        .checkout-actions {
+            padding: 1.5rem;
+            display: flex;
+            gap: 1rem;
+        }
+        .btn-confirm {
+            flex: 1;
+            padding: 0.875rem;
+            background: linear-gradient(135deg, #a855f7, #ec4899);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-weight: 700;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: opacity 0.2s;
+        }
+        .btn-confirm:hover { opacity: 0.9; }
+        .btn-back {
+            flex: 1;
+            padding: 0.875rem;
+            background: white;
+            color: #6b7280;
+            border: 2px solid #e5e7eb;
+            border-radius: 10px;
+            font-weight: 600;
+            text-decoration: none;
+            text-align: center;
+            transition: border-color 0.2s;
+        }
+        .btn-back:hover { border-color: #a855f7; color: #a855f7; }
+        .pickup-note {
+            margin: 0 1.5rem 1.5rem;
+            padding: 0.875rem;
+            background: #fef3c7;
+            border-radius: 10px;
+            font-size: 0.875rem;
+            color: #92400e;
+            font-weight: 500;
+        }
+    </style>
+</head>
+<body>
+
+<header class="page-header-store">
+    <div class="container">
+        <a href="{% url 'cart' %}">← Back to Cart</a>
+        <h1>✅ Checkout</h1>
+        <span></span>
+    </div>
+</header>
+
+<main class="page-content">
+<div class="container">
+
+    <div class="checkout-box">
+        <div class="checkout-header">
+            <h2>📋 Review Your Order</h2>
+            <p style="color:#6b7280;margin-top:0.25rem;font-size:0.875rem;">Please confirm your items before placing the order.</p>
+        </div>
+
+        <div class="checkout-items">
+            {% for item in cart_items %}
+            <div class="checkout-item">
+                <span class="checkout-item-name">{{ item.product.name }} × {{ item.quantity }}</span>
+                <span class="checkout-item-price">₹{{ item.subtotal }}</span>
+            </div>
+            {% endfor %}
+        </div>
+
+        <div class="checkout-total">
+            <span>Total Amount</span>
+            <span>₹{{ total }}</span>
+        </div>
+
+        <div class="pickup-note">
+            📍 <strong>Pickup Reminder:</strong> Collect your order from the College Store counter. You'll need your order number.
+        </div>
+
+        <div class="checkout-actions">
+            <a href="{% url 'cart' %}" class="btn-back">← Edit Cart</a>
+            <form method="post" style="flex:1;">
+                {% csrf_token %}
+                <button type="submit" class="btn-confirm" style="width:100%;">Place Order ✅</button>
+            </form>
+        </div>
+    </div>
+
+</div>
+</main>
+
+<footer class="footer">
+    <div class="container">
+        <p>&copy; {% now "Y" %} College Utility Portal. All rights reserved.</p>
+    </div>
+</footer>
+
+</body>
+</html>
